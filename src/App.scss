@@ -1,0 +1,708 @@
+@import "_normalize.scss";
+
+/* #region globals */
+
+$size: 1em;
+
+$black: #000;
+$black-50: rgba($black, 0.9);
+$dark: $black;
+$red: #fd5353;
+$light: #f7f4f0;
+$blue: #98afb9;
+$blue-light: #6bbee7;
+
+
+/* #endregion globals */
+
+/* #region normalize */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+  direction: rtl;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.app {
+  text-align: center;
+}
+
+/* #endregion normalize */
+
+/* #region mixins */
+
+%border1 {
+  box-shadow: inset 0 0 0 1px $black-50;
+}
+
+%border1-bottom {
+  box-shadow: inset 0 -1px 0 0  $black-50;
+}
+
+%pseudo {
+  display: block;
+  content: "";
+  position: absolute;
+}
+
+%sideWindowsItemPseudo {
+  @extend %pseudo;
+  width: $size * 6;
+  height: $size * 0.5;
+  background: $light;
+  border-top-left-radius: $size * 0.5;
+  border-top-right-radius: $size * 0.5;
+  right: -$size * 1;
+  top: -$size * 2.75;
+  @extend %border1;
+}
+
+
+@mixin on-circle($item-count, $circle-size) {
+  position: absolute;
+  width:  $circle-size;
+  height: $circle-size;
+  border-radius: 50%;
+
+  > * {
+    display: block;
+    position: absolute;
+    top:  50%;
+    left: 50%;
+    $angle: (360 / $item-count);
+    $rot: 0;
+
+    @for $i from 1 through $item-count {
+      &:nth-of-type(#{$i}) {
+        transform:
+          rotate($rot * 1deg)
+          translate($circle-size / 2)
+      }
+      $rot: $rot + $angle;
+    }
+  }
+}
+
+/* #endregion mixins */
+
+
+/* #region trolleybus */
+
+.trolleybuscontainer {
+  width: 90%;
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: $size * 3 0;
+}
+
+.trolleybus {
+  display: inline-flex;
+  flex-direction: column;
+  margin: $size * 8 $size * 3  $size * 3;
+  &-top {
+    background: $light;
+    height: $size * 2;
+    width: 100%;
+    @extend %border1;
+    position: relative;
+    &-rectangles {
+      &-item {
+        position: absolute;
+        &:nth-child(1) {
+          width: $size * 6.5;
+          height: $size * 0.75;
+          top: -$size *  0.75;
+          right: $size * 36;
+          background: $light;
+        }
+        &:nth-child(2) {
+          border-bottom: $size * 1.5 solid $light;
+          border-right: $size * 1 solid transparent;
+          height: 0;
+          width: $size * 6.25;
+          right: $size * 34.75;
+          top: -$size *  2.25;
+        }
+      }
+    }
+    &-horns {
+      position: absolute;
+      left: $size * 41;
+      top: -$size *  2;
+      &:after,
+      &:before {
+        @extend %pseudo;
+        background: lighten($dark, 20%);
+        width: $size *  0.375;
+        bottom: -$size *  2;
+      }
+      &:before {
+        height: $size *  1;
+        right: $size *  0.25;
+      }
+      &:after {
+        height: $size *  4;
+        right: $size *  40;
+      }
+      &-item {
+        width: $size * 45;
+        height: $size *  1.5;
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        transform: translate3d(0, -($size *  1.5), 0) rotate3d(1, 1, 1, 6deg);
+        &-part {
+          background: lighten($dark, 20%);
+          flex-grow: 1;
+          margin: 0 -2px;
+          &:nth-child(1),
+          &:nth-child(3),
+          &:nth-child(5),
+          &:nth-child(7),
+          &:nth-child(10) {
+            border-radius: $size *  0.5;
+          }
+          &:nth-child(1) {
+            height: $size *  1.125;
+            flex-grow: 1;
+            margin-bottom: -$size *  0.25;
+          }
+          &:nth-child(2) {
+            height: $size *  0.675;
+            flex-grow: 1;
+          }
+          &:nth-child(3) {
+            height: $size *  1.125;
+            flex-grow: 2;
+          }
+          &:nth-child(4) {
+            height: $size *  0.675;
+            flex-grow: 1;
+          }
+          &:nth-child(5) {
+            height: $size *  0.825;
+            flex-grow: 7;
+          }
+          &:nth-child(6) {
+            height: $size *  0.675;
+          }
+          &:nth-child(7) {
+            height: $size *  1;
+            flex-grow: 1;
+          }
+          &:nth-child(8) {
+            height: $size *  0.5;
+            flex-grow: 20;
+          }
+          &:nth-child(9) {
+            height: $size *  0.25;
+            flex-grow: 10;
+          }
+          &:nth-child(10) {
+            height: $size *  1;
+          }
+        }
+      }
+    }
+  }
+  &-blocks {
+    display: flex;
+    &-item {
+      display: flex;
+      background: $light;
+      height: $size * 17.875;
+    }
+  }
+}
+
+/* #endregion trolleybus */
+
+/* #region door */
+
+.door {
+  display: flex;
+  @extend %border1;
+  margin-top: $size * 1.5;
+  position: relative;
+  .trolleybus-blocks-item:not(.trolleybus-blocks-item-0):not(.trolleybus-blocks-item-1):not(.trolleybus-blocks-item-2) & {
+    &:before {
+      @extend %sideWindowsItemPseudo;
+      top: -$size * 4;
+    }
+  }
+  &:after {
+    @extend %pseudo;
+    width: 120%;
+    height: $size * 0.5;
+    bottom: calc(-#{($size * 0.5)} + 1px);
+    left: -10%;
+    border-bottom-left-radius: $size * 0.5;
+    border-bottom-right-radius: $size * 0.5;
+    background: $light;
+    @extend %border1-bottom;
+    z-index: 1;
+  }
+  &-half {
+    display: flex;
+    @extend %border1;
+    &-item {
+      @extend %border1;
+      padding-bottom: $size * 2;
+      background: $light;
+      &-window {
+        width: $size * 1.5;
+        height: $size * 6;
+        @extend %border1;
+        border-radius: $size * 0.5;
+        margin: $size * 0.5;
+        background: $blue;
+        .trolleybus-blocks-item:not(.trolleybus-blocks-item-1) &.position-bottom {
+          background: $light;
+        }
+      }
+    }
+  }
+}
+
+/* #endregion door */
+
+/* #region side */
+
+.side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .red & {
+    background: $red;
+  }
+  .blue & {
+    background: $blue-light;
+  }
+  &-windows {
+    display: flex;
+    background: $light;
+    border-bottom-right-radius: $size;
+    border-bottom-left-radius: $size;
+    .trolleybus-blocks-item-2 & {
+      padding-left: $size * 2.5;
+    }
+    .trolleybus-blocks-item-0 & {
+      border-bottom-right-radius: 0;
+    }
+    .trolleybus-blocks-item.last & {
+      border-bottom-left-radius: 0;
+      padding-right: $size * 3.5;
+    }
+    &-item {
+      width: $size * 10;
+      height: $size * 7;
+      @extend %border1;
+      border-radius: $size * 0.5;
+      margin: $size * 0.25 $size * 0.5  $size * 0.5;
+      background: $blue;
+      position: relative;
+      .trolleybus-blocks-item-0 & {
+        &:first-child {
+          width: $size * 1.5;
+          margin-right: 0;
+          margin-left: 0;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &:last-child {
+          width: $size * 3;
+        }
+      }
+      .trolleybus-blocks-item.last & {
+        width: $size * 1.5;
+        margin-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      &-top {
+        display: flex;
+        height: $size * 3.5;
+        border-bottom: $size * 0.375 solid $light;
+        width: calc(100% - 2px);
+        margin: 1px;
+        li {
+          width: calc(50% + #{$size * 0.375});
+          background: $blue;
+        }
+        &-right {
+          border-left: $size * 0.375 solid $light;
+          margin-left: -$size * 0.1875;
+          border-top-right-radius: $size * 0.5;
+        }
+        &-left {
+          border-right: $size * 0.375 solid $light;
+          margin-right: -$size * 0.1875;
+          border-top-left-radius: $size * 0.5;
+        }
+      }
+      .trolleybus-blocks-item:not(.trolleybus-blocks-item-0) & {
+        &:after {
+          @extend %sideWindowsItemPseudo;
+        }
+      }
+      .trolleybus-blocks-item:not(.trolleybus-blocks-item-1) & {
+        &:first-child {
+          &:after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &-bottom {
+    display: flex;
+    height: $size * 3;
+    background: $light;
+    justify-content: flex-end;
+    @extend %border1-bottom;
+    position: relative;
+    .trolleybus-blocks-item-1 & {
+      justify-content: flex-start;
+    }
+    &-item {
+      &:not(.wheel-exist) {
+        width: $size * 2.5;
+        height: $size * 1.75;
+        margin: $size * 0.375;
+        @extend %border1;
+        border-radius: $size * 0.5;
+        &:first-child {
+          width: $size * 3.5;
+        }
+      }
+      .trolleybus-blocks-item-0 & {
+        &:first-child {
+          width: $size * 2.5;
+        }
+      }
+      .trolleybus-blocks-item-1 &,
+      .trolleybus-blocks-item.last & {
+        width: unset!important;
+        height: auto;
+        box-shadow: none;
+        margin: 0;
+      }
+    }
+    &:before,
+    &:after {
+      @extend %pseudo;
+      @extend %border1-bottom;
+      height: $size;
+      background: $light;
+      top: -$size;
+    }
+    &:before {
+      left: $size * 0.375;
+      width: $size * 2.5;
+      .trolleybus-blocks-item-1 & {
+        width: $size * 12.5;
+      }
+      .trolleybus-blocks-item.last & {
+        display: none;
+      }
+    }
+    &:after {
+      right: $size * 0.375;
+      width: $size * 8;
+      .trolleybus-blocks-item-0 &,
+      .trolleybus-blocks-item-1 & {
+        display: none;
+      }
+      .trolleybus-blocks-item-2 & {
+        width: $size * 10.5;
+      }
+      .trolleybus-blocks-item.last & {
+        width: $size * 3.5;
+      }
+    }
+  }
+  &.side-simple {
+    width: $size * 1.5;
+    position: relative;
+    &:before {
+      @extend %pseudo;
+      background: $light;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: $size * 8;
+    }
+    .side-bottom {
+      &:before,
+      &:after {
+        display: none;
+      }
+    }
+  }
+}
+
+.wheel {
+  width: $size * 10;
+  height: $size * 10;
+  margin-top: -($size * 2);
+  position: relative;
+  &-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $size * 10;
+    height: $size * 5;
+    overflow: hidden;
+    &:before {
+      @extend %pseudo;
+      top: 0;
+      left: 0;
+      width: $size * 10;
+      height: $size * 10;
+      border-radius: 50%;
+      @extend %border1;
+    }
+  }
+  &-body {
+    position: absolute;
+    width: $size * 9;
+    height: $size * 9;
+    border-radius: 50%;
+    @extend %border1;
+    background: lighten($dark, 50%);
+    top: $size * 0.5;
+    left: $size * 0.5;
+    &-external {
+      @include on-circle($item-count: 24, $circle-size: $size * 8.5);
+      top: $size * 0.25;
+      left: $size * 0.5;
+      &-item {
+        @extend %border1;
+        border-bottom-right-radius: $size * 0.25;
+        border-top-right-radius: $size * 0.25;
+        border-left: 0;
+        width: $size * 0.5;
+        height: $size;
+        margin: -($size * 0.5);
+      }
+    }
+    &-internal1 {
+      @include on-circle($item-count: 5, $circle-size: $size * 2.75);
+      top: $size * 3;
+      left: $size * 3;
+      &-item {
+        border-right: $size solid $dark;
+        border-top: $size * 0.5  solid transparent;
+        border-bottom: $size * 0.5 solid transparent;
+        width: 0;
+        height: $size;
+        margin: -($size * 0.375);
+      }
+    }
+    &-internal2 {
+      @include on-circle($item-count: 5, $circle-size: $size * 2.75);
+      top: $size * 3.175;
+      left: $size * 3.175;
+      transform: rotate(37deg);
+      &-item {
+        width: $size * 0.5;
+        height: $size * 0.5;
+        margin: -($size * 0.325);
+        border-radius: 50%;
+        @extend %border1;
+      }
+    }
+    &-circle1,
+    &-circle2 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      @extend %border1;
+    }
+    &-circle1 {
+      width: $size * 4;
+      height: $size * 4;
+      margin: - $size * 2;
+    }
+    &-circle2 {
+      width: $size * 1.5;
+      height: $size * 1.5;
+      margin: - $size * 0.75;
+    }
+  }
+
+}
+
+/* #endregion side */
+
+/* #region separator */
+
+.separator {
+  display: flex;
+  width: $size * 8.5;
+  background: lighten($dark, 50%);
+  margin-top: -($size * 2);
+  &-block {
+    width: calc(50% - #{$size * 0.25});
+    display: flex;
+    &:last-child {
+      margin-right: $size * 0.5;
+    }
+    &-item {
+      display: flex;
+      > div {
+        width: $size * 0.25;
+        position: relative;
+        &:before,
+        &:after {
+          @extend %pseudo;
+          width: 0;
+          height: 0;
+          right: 0;
+        }
+        &:before {
+          top: -$size * 0.25;
+        }
+        &:after {
+          bottom: -$size * 0.25;
+        }
+      }
+      &-right {
+        background: lighten($dark, 40%);
+        &:before {
+          border-bottom: $size * 0.25 solid lighten($dark, 40%);
+          border-right: $size * 0.25 solid transparent;
+        }
+        &:after {
+          border-top: $size * 0.25 solid lighten($dark, 40%);
+          border-right: $size * 0.25 solid transparent;
+        }
+      }
+      &-left {
+        background: lighten($dark, 20%);
+        &:before,
+        &:after {
+          border-left: $size * 0.25 solid transparent;
+        }
+        &:before {
+          border-bottom: $size * 0.25 solid lighten($dark, 30%);
+        }
+        &:after {
+          border-top: $size * 0.25 solid lighten($dark, 20%);
+        }
+      }
+
+    }
+  }
+}
+
+/* #endregion separator */
+
+/* #region front and back */
+
+.front,
+.back {
+  position: relative;
+  div {
+    position: absolute;
+    z-index: 1;
+    @extend %border1;
+    background: $light;
+  }
+}
+
+.bumper {
+  width: $size * 1.75;
+  height: $size * 2;
+  border-radius: $size * 0.5;
+  bottom: 0;
+  .front & {
+    right: -$size * 0.5;
+  }
+  .back & {
+    left: -$size * 0.5;
+  }
+}
+
+.light {
+  width: $size * 0.25;
+  height: $size * 1.5;
+  bottom: $size * 4;
+  .front & {
+    right: -$size * 0.25;
+  }
+  .back & {
+    left: -$size * 0.25;
+  }
+}
+
+.wiper {
+  width: $size * 0.25;
+  height: $size * 4;
+  bottom: $size * 10;
+  .front & {
+    right: -$size * 0.5;
+    &:before {
+      @extend %pseudo;
+      bottom: 0;
+      right: 0;
+      background: $dark;
+      width: $size * 0.5;
+      height: $size * 0.25;
+    }
+  }
+}
+
+.mirrow {
+  width: $size * 1.25;
+  height: $size * 1.75;
+  bottom: $size * 13;
+  border-radius: $size * 0.5;
+  .front & {
+    right: -$size * 1;
+    z-index: 2;
+    &:before {
+      @extend %pseudo;
+      bottom: $size * 0.875;
+      right: $size * 0.5;
+      border-top-right-radius: $size * 0.5;
+      border-right: $size * 0.25 solid $dark;
+      border-top: $size * 0.25 solid $dark;
+      width: $size * 0.5;
+      height: $size * 4;
+    }
+  }
+}
+
+.handle {
+  bottom: $size * 9;
+  border-top-left-radius: $size * 0.5;
+  border-bottom-left-radius: $size * 0.5;
+  border-left: $size * 0.25 solid $dark;
+  border-top: $size * 0.25 solid $dark;
+  border-bottom: $size * 0.25 solid $dark;
+  width: $size * 1;
+  height: $size * 9;
+  .back & {
+    left: -$size * 1;
+    background: transparent;
+  }
+}
+
+/* #endregion front and back */
