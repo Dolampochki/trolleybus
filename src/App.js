@@ -11,9 +11,9 @@ document.title = "Trolleybus";
 /* Screen */
 
 function Screen(props){
-  const [mainSize, setMainSize] = useState(8);
-  const [trolleybusBlocksItemsNum, setTrolleybusBlocksItemsNum] = useState(5);
-  const [trolleybusColor, setTrolleybusColor] = useState('red');
+  const [mainSize, setMainSize] = useState(16);
+  const [trolleybusBlocksItemsNum, setTrolleybusBlocksItemsNum] = useState(4);
+  const [trolleybusColor, setTrolleybusColor] = useState('blue');
 
   function plusMainSize() {
     setMainSize(mainSize + 2);
@@ -39,18 +39,19 @@ function Screen(props){
 
   return (
     <div>
-
-      <div className="buttons">
-        <button id="btnPlusMainSize" className="btn-plus" onClick={plusMainSize}>+</button>
-        <button id="btnMinusMainSize" className="btn-minus" onClick={minusMainSize}>-</button>
-      </div>
-      <div className="buttons-2">
-        <button id="btnPlusTrolleybusBlocksItemsNum" className="btn-plus" onClick={plusSetTrolleybusBlocksItemsNum}>+</button>
-        <button id="btnMinusTrolleybusBlocksItemsNum" className="btn-minus" onClick={minusSetTrolleybusBlocksItemsNum}>-</button>
-      </div>
-      <div className="buttons-3">
-        <button className="btn-blue" onClick={() => setTrolleybusColor('blue')}>Blue</button>
-        <button className="btn-red" onClick={() => setTrolleybusColor('red')}>Red</button>
+      <div className="btns">
+        <div className="btn-group btn-group-size">
+          <button id="btnPlusMainSize" className="btn btn-plus" onClick={plusMainSize}>+</button>
+          <button id="btnMinusMainSize" className="btn btn-minus" onClick={minusMainSize}>-</button>
+        </div>
+        <div className="btn-group btn-group-items">
+          <button id="btnPlusTrolleybusBlocksItemsNum" className="btn btn-plus" onClick={plusSetTrolleybusBlocksItemsNum}>{trolleybusBlocksItemsNum + 1}</button>
+          <button id="btnMinusTrolleybusBlocksItemsNum" className="btn btn-minus" onClick={minusSetTrolleybusBlocksItemsNum}>{trolleybusBlocksItemsNum - 1}</button>
+        </div>
+        <div className="btn-group btn-group-color">
+          <button className="btn btn-blue" onClick={() => setTrolleybusColor('blue')}></button>
+          <button className="btn btn-red" onClick={() => setTrolleybusColor('red')}></button>
+        </div>
       </div>
       <div className="trolleybuscontainer">
         <Trolleybus trolleybusBlocksItemsNum={trolleybusBlocksItemsNum} mainSize={mainSize} trolleybusColor={trolleybusColor} />
