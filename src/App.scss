@@ -197,7 +197,7 @@ ul {
           background: darken($red, 10%);
         }
       }
-      &[disabled=disabled] {
+      &[disabled] {
         opacity: 0.5;
       }
     }
@@ -866,7 +866,7 @@ ul {
   }
 
   .trolleybuscontainer {
-      padding: 0 0 2em;
+      padding: 2em 0;
       .trolleybus {
         margin-top: 5em;
       }

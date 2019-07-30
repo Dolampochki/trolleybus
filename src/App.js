@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.min.css';
 
 document.title = "Trolleybus";
@@ -11,42 +11,71 @@ document.title = "Trolleybus";
 /* Screen */
 
 function Screen(props){
-  const [mainSize, setMainSize] = useState(16);
-  const [trolleybusBlocksItemsNum, setTrolleybusBlocksItemsNum] = useState(4);
+
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  let startMainSize = 16;
+  startMainSize = checkStartMainSize(windowWidth);
+  const [mainSize, setMainSize] = useState(startMainSize);
+
+  function checkStartMainSize(windowWidth) {
+    for (let i=2; i < 17; i++) {
+      if (windowWidth / i >= 100 ) {
+        startMainSize = i;
+      }
+    }
+    return startMainSize;
+  }
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    startMainSize = checkStartMainSize(windowWidth);
+    const handleResizeMainSize = () => setMainSize(startMainSize);
+    window.addEventListener('resize', handleResizeMainSize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleResizeMainSize);
+    };
+  });
+
+  const [itemsNum, setItemsNum] = useState(4);
   const [trolleybusColor, setTrolleybusColor] = useState('blue');
+  const [btnMinusItemsNumDisabled, setBtnMinusItemsNumDisabled] = useState(true);
+  const [btnMinusMainSizeDisabled, setBtnMinusMainSizeDisabled] = useState(mainSize <= 4 && true);
 
   function plusMainSize() {
     setMainSize(mainSize + 2);
-    document.getElementById('btnMinusMainSize').removeAttribute('disabled');
+    setBtnMinusMainSizeDisabled(false);
   }
 
   function minusMainSize(e) {
     mainSize > 2 && setMainSize(mainSize - 2);
-    mainSize <= 4 && document.getElementById('btnMinusMainSize').setAttribute("disabled", "disabled");
+    mainSize <= 4 && setBtnMinusMainSizeDisabled(true);
   }
 
-  function plusSetTrolleybusBlocksItemsNum() {
-    setTrolleybusBlocksItemsNum(trolleybusBlocksItemsNum + 1);
-    document.getElementById('btnMinusTrolleybusBlocksItemsNum').removeAttribute('disabled');
+  function plusSetItemsNum() {
+    setItemsNum(itemsNum + 1);
+    setBtnMinusItemsNumDisabled(false);
   }
 
-  function minusSetTrolleybusBlocksItemsNum() {
-    trolleybusBlocksItemsNum > 4 && setTrolleybusBlocksItemsNum(trolleybusBlocksItemsNum - 1);
-    trolleybusBlocksItemsNum <= 5 && document.getElementById('btnMinusTrolleybusBlocksItemsNum').setAttribute("disabled", "disabled");
+  function minusSetItemsNum() {
+    itemsNum > 4 && setItemsNum(itemsNum - 1);
+    itemsNum <= 5 && setBtnMinusItemsNumDisabled(true);
   }
-
-
 
   return (
     <div>
       <div className="btns">
         <div className="btn-group btn-group-size">
           <button id="btnPlusMainSize" className="btn btn-plus" onClick={plusMainSize}>+</button>
-          <button id="btnMinusMainSize" className="btn btn-minus" onClick={minusMainSize}>-</button>
+          <button id="btnMinusMainSize" className="btn btn-minus" onClick={minusMainSize} disabled={btnMinusMainSizeDisabled}>-</button>
         </div>
         <div className="btn-group btn-group-items">
-          <button id="btnPlusTrolleybusBlocksItemsNum" className="btn btn-plus" onClick={plusSetTrolleybusBlocksItemsNum}>{trolleybusBlocksItemsNum + 1}</button>
-          <button id="btnMinusTrolleybusBlocksItemsNum" className="btn btn-minus" onClick={minusSetTrolleybusBlocksItemsNum}>{trolleybusBlocksItemsNum - 1}</button>
+          <button className="btn btn-plus" onClick={plusSetItemsNum}>{itemsNum}</button>
+          <button className="btn btn-minus" onClick={minusSetItemsNum} disabled={btnMinusItemsNumDisabled}>{itemsNum - 2}</button>
         </div>
         <div className="btn-group btn-group-color">
           <button className="btn btn-blue" onClick={() => setTrolleybusColor('blue')}></button>
@@ -54,7 +83,7 @@ function Screen(props){
         </div>
       </div>
       <div className="trolleybuscontainer">
-        <Trolleybus trolleybusBlocksItemsNum={trolleybusBlocksItemsNum} mainSize={mainSize} trolleybusColor={trolleybusColor} />
+        <Trolleybus trolleybusBlocksItemsNum={itemsNum} mainSize={mainSize} trolleybusColor={trolleybusColor} />
       </div>
     </div>
   );
